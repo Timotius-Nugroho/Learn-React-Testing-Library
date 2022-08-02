@@ -1,30 +1,54 @@
-import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
-import Login from '../components/Login'
+import React from "react";
+import { render, fireEvent } from "@testing-library/react";
+import Login from "../components/Login";
 
-describe('Login Component', () => {
-  // create handleSetIsLoginMock
-  // dont forget to clear all mocks
+describe("Login Component", () => {
+  const handleSetIsLoginMock = jest.fn();
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  it('should render Login form', () => {
-    // render Login component
-    // get email input
-    // get password input
-    // get submit btn
-    // fireEvent to input  email with value 'azharie@mail.com'
-    // fireEvent to input  password with value '12345asdf'
-    // expect handleSetIsLoginMock to be called
-  })
+  it("should render Login form", async () => {
+    const { getByLabelText, findByText, getByTestId, debug } = render(
+      <Login handleSetIsLogin={handleSetIsLoginMock} />
+    );
 
-  it('entering an invalid password shows an error message', () => {
-    // create window.alert mock
-    // render Login component
-    // get email input
-    // get password input
-    // get submit btn
-    // fireEvent to input  email with value 'azharie@mail.com'
-    // fireEvent to input  password with value '12345'
-    // expect window.alert mock to be called 1 time
-    // expect window.alert mock to be called with 'Wrong email or password'
-  })
-})
+    // expect(container).toBeInTheDocument();
+    // debug();
+    const email = getByTestId("email-test");
+    const password = getByLabelText(/Password/i);
+    const submitBtn = await findByText(/Login/i);
+
+    expect(email).toBeInTheDocument();
+    expect(password).toBeInTheDocument();
+    expect(submitBtn).toBeInTheDocument();
+
+    fireEvent.change(email, { target: { value: "tes@mail.com" } });
+    fireEvent.change(password, { target: { value: "123" } });
+    fireEvent.click(submitBtn);
+    expect(handleSetIsLoginMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("entering an invalid password shows an error message", () => {
+    window.alert = jest.fn();
+
+    const { getByLabelText, getByText, debug } = render(
+      <Login handleSetIsLogin={handleSetIsLoginMock} />
+    );
+    const email = getByLabelText(/Email/i);
+    const password = getByLabelText(/Password/i);
+    const submitBtn = getByText(/Login/i);
+
+    expect(email).toBeInTheDocument();
+    expect(password).toBeInTheDocument();
+    expect(submitBtn).toBeInTheDocument();
+    // debug();
+
+    fireEvent.change(email, { target: { value: "tes@mail.com" } });
+    fireEvent.change(password, { target: { value: "1234" } });
+    fireEvent.click(submitBtn);
+
+    expect(window.alert).toHaveBeenCalledTimes(1);
+    expect(window.alert).toHaveBeenCalledWith("Wrong email or password");
+  });
+});

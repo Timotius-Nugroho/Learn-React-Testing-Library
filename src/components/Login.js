@@ -1,37 +1,38 @@
-import React, { useState } from 'react'
-import './styles.css'
+import React, { useState } from "react";
+import "./styles.css";
 
 const fakeUser = {
-  name: 'azharie',
-  email: 'azharie@mail.com',
-  password: '12345asdf'
-}
+  name: "tes",
+  email: "tes@mail.com",
+  password: "123",
+};
 const Login = ({ handleSetIsLogin }) => {
-  const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
-  const handleSetEmail = event => {
-    const { value } = event.target || {}
-    setEmail(value)
-  }
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const handleSetEmail = (event) => {
+    const { value } = event.target || {};
+    setEmail(value);
+  };
 
-  const handleSetPass = event => {
-    const { value } = event.target || {}
-    setPass(value)
-  }
+  const handleSetPass = (event) => {
+    const { value } = event.target || {};
+    setPass(value);
+  };
 
-  const handleSubmit = e => {
-    e.preventDefault()
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
     if (email === fakeUser.email && pass === fakeUser.password) {
-      return handleSetIsLogin(true)
+      return handleSetIsLogin(true);
     }
-    alert('Wrong email or password')
-  }
+    alert("Wrong email or password");
+  };
 
   return (
     <form onSubmit={handleSubmit} className="loginForm">
       <label htmlFor="input-email">Email</label>
       <input
+        data-testid="email-test"
         type="email"
         id="input-email"
         value={email}
@@ -44,9 +45,10 @@ const Login = ({ handleSetIsLogin }) => {
         value={pass}
         onChange={handleSetPass}
       />
-      <input type="submit" value="Login" />
+      <button type="submit">Login</button>
+      {/* <input style={{ backgroundColor: "red" }} type="submit" value="Login" /> */}
     </form>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
